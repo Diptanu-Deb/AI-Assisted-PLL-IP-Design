@@ -384,9 +384,10 @@ Internal PFD Circuit
 
 A conventional PFD uses:
 
-Two positive-edge-triggered D flip-flops  
-One asynchronous reset gate   
-                 D = 1
+Two positive-edge-triggered D flip-flops   
+One asynchronous reset gate  
+
+                  D = 1
                   │
       REF_CLK ───►┌────────┐
                   │  DFF1  │
