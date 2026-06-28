@@ -315,6 +315,7 @@ Case 1: Reference Clock Leads
 
 If the reference clock edge arrives before the feedback clock:
 
+```
 REF_CLK :  ↑--------↑--------↑
 
 FB_CLK  :      ↑--------↑--------↑
@@ -324,6 +325,7 @@ UP       :  ─────┐      ─────┐
                  └────       └────
 
 DOWN     : __________________________
+````
 Operation
 Rising edge of REF_CLK sets the UP flip-flop.
 UP becomes HIGH.
