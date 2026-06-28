@@ -1,20 +1,25 @@
 # AI-Assisted-PLL-IP-Design
-VSD Internship on AI Assisted PLL IP Design
+VSD Internship on AI Assisted PLL IP Design  
 ## Introduction
 A clock multiplier Phase-Locked Loop (PLL) is a negative feedback control system that generates a high-frequency output clock whose phase is related to the low frequency input clock. The need for PLLs is widespread as they find application in analog, digital, RF and communication systems. 
+
 The low-frequency clock can be generated using a crystal with frequencies up to 200 MHz. Generating a high-frequency clock with high spectral purity is not possible with a crystal and this is where PLLs come into play. 
-A simple PLL consists of a Phase and Frequency Detector (PFD), Charge Pump (CP), Loop Filter (LF), Voltage Controlled Oscillator (VCO) and a frequency divider in the feeback path. 
-The processors used in our Gadgets have various modules inside serving different purposes. These modules may include CPU, GPU, RAM, WiFi module, Audio module, and so on. 
-The interesting fact is that each of these modules may not run at a particular clock frequency. For example, the CPU would need a high clock frequency for performing calculations faster, while the Display module may not. 
-This is where a Phase-Locked Loop circuit comes into the picture. As shown in Figure above, a PLL is installed at the clock entry point of each above module to produce the desired frequency at which the module would operate. 
+
+A simple PLL consists of a Phase and Frequency Detector (PFD), Charge Pump (CP), Loop Filter (LF), Voltage Controlled Oscillator (VCO) and a frequency divider in the feeback path.   
+The processors used in our Gadgets have various modules inside serving different purposes. These modules may include CPU, GPU, RAM, WiFi module, Audio module, and so on.  
+The interesting fact is that each of these modules may not run at a particular clock frequency. For example, the CPU would need a high clock frequency for performing calculations faster, while the Display module may not.  
+This is where a Phase-Locked Loop circuit comes into the picture. As shown in Figure above, a PLL is installed at the clock entry point of each above module to produce the desired frequency at which the module would operate.  
 
 ## Phase Frequency Detector (PFD)
 
-The Phase Frequency Detector (PFD) is the first and one of the most important blocks in a Charge-Pump PLL (CP-PLL). It compares the phase and frequency of the reference clock (REF_CLK) and the feedback clock (FB_CLK) from the frequency divider. Based on the comparison, it generates two digital signals: 
-1.UP – Increases the VCO control voltage, causing the VCO frequency to increase.  
+The Phase Frequency Detector (PFD) is the first and one of the most important blocks in a Charge-Pump PLL (CP-PLL). It compares the phase and frequency of the reference clock (REF_CLK) and the feedback clock (FB_CLK) from the frequency divider. Based on the comparison, it generates two digital signals:
+
+1.UP – Increases the VCO control voltage, causing the VCO frequency to increase.    
+
 2.DOWN – Decreases the VCO control voltage, causing the VCO frequency to decrease.  
+
 ### Block Diagram
-     ```     REF_CLK
+         REF_CLK
              │
              ▼
       +----------------+
@@ -26,7 +31,7 @@ The Phase Frequency Detector (PFD) is the first and one of the most important bl
              ▲
              │
           FB_CLK
-    ```
+    
     Purpose of the PFD
 
 #### The PFD detects:  
@@ -35,4 +40,68 @@ Frequency difference between the clocks.
 
 Unlike a simple XOR phase detector, a PFD can detect whether one clock is running faster or slower than the other, making it suitable for wide frequency acquisition.  
 
+### Phase/Frequency Locking Concept in a PLL
+
+The phase/frequency locking concept is the fundamental operating principle of a Phase-Locked Loop (PLL). A PLL continuously compares a reference clock with a feedback clock and adjusts the output frequency of the Voltage-Controlled Oscillator (VCO) until both clocks have the same frequency and a constant phase relationship.  
+
+### What is Locking?
+
+A PLL is said to be locked when:
+
+The output frequency (after the feedback divider) equals the reference frequency.  
+The phase difference between the reference and feedback clocks is constant (ideally zero or a fixed offset).  
+
+Mathematically:
+
+fREF=fFB
+	​
+Since the feedback clock is obtained by dividing the VCO output:
+
+fFB=fVCO/N
+	​
+Therefore, when locked:
+
+fVCO=N×fREF
+	​
+where:
+
+fREF = Reference clock frequency
+fFB= Feedback clock frequency
+fVCO= VCO output frequency
+N = Divider ratio
+
+PLL Block Diagram:
+
           
+          Reference Clock
+                │
+                ▼
+      +-------------------+
+      |       PFD         |
+      +-------------------+
+          │          │
+         UP        DOWN
+          │          │
+          ▼          ▼
+      +-------------------+
+      |   Charge Pump     |
+      +-------------------+
+                │
+                ▼
+      +-------------------+
+      |   Loop Filter     |
+      +-------------------+
+                │
+             Vctrl
+                │
+                ▼
+      +-------------------+
+      |       VCO         |
+      +-------------------+
+                │
+          Output Clock
+                │
+                ▼
+        Divide by N
+                │
+                └───────────────► Feedback Clock
