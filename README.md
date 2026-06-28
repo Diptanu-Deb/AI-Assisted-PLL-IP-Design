@@ -105,3 +105,327 @@ PLL Block Diagram:
         Divide by N
                 │
                 └───────────────► Feedback Clock
+
+## Phase Locking
+
+Phase locking means that the rising edges of the reference clock and the feedback clock occur at the same instant (or maintain a constant phase difference).
+
+Before Lock
+Reference :  ↑      ↑      ↑
+
+Feedback  :      ↑      ↑      ↑
+
+The clocks are not aligned.
+
+Phase error exists.
+PFD generates UP or DOWN pulses.
+The VCO frequency is adjusted.
+During Locking
+Reference :  ↑      ↑      ↑
+
+Feedback  :    ↑      ↑      ↑
+
+The phase error decreases with each cycle.
+
+After Lock
+Reference :  ↑      ↑      ↑      ↑
+
+Feedback  :  ↑      ↑      ↑      ↑
+
+The edges overlap.
+
+Phase error ≈ 0.
+UP = DOWN = 0 (ideally).
+Control voltage remains nearly constant.
+Frequency Locking
+
+Frequency locking means the frequencies become equal.
+
+Case 1: VCO Too Slow
+Reference Clock
+
+↑    ↑    ↑    ↑
+
+Feedback Clock
+
+↑       ↑       ↑
+
+The feedback clock has a lower frequency.
+
+The PFD detects:
+
+Reference leads.  
+UP pulses are generated.  
+Charge pump increases Vctrl.  
+VCO frequency increases.  
+
+Case 2: VCO Too Fast  
+Reference Clock
+
+↑      ↑      ↑
+
+Feedback Clock
+
+↑   ↑   ↑   ↑
+
+The feedback clock has a higher frequency.
+
+The PFD detects:
+
+Feedback leads.  
+DOWN pulses are generated.  
+Charge pump decreases Vctrl.  
+VCO frequency decreases.  
+
+Case 3: Frequency Locked
+Reference
+
+↑     ↑     ↑
+
+Feedback
+
+↑     ↑     ↑
+
+Both clocks have the same frequency.
+
+Lock Acquisition Process
+
+The PLL reaches lock in four stages:
+
+1. Initial State
+VCO starts at an arbitrary frequency.
+Large phase and frequency error.  
+2. Frequency Acquisition
+PFD detects frequency difference.
+Charge pump changes Vctrl.
+VCO frequency moves toward the desired value.  
+3. Phase Alignment
+Frequencies become equal.
+Remaining phase error is corrected.  
+4. Locked State
+Frequencies are equal.
+Phase error is nearly zero.
+VCO operates at a stable frequency.  \
+
+Example
+
+Suppose:
+
+Reference clock = 100 MHz
+
+Divider = 8
+
+Desired VCO frequency:
+
+fVCO=8×100 MHz=800 MHz
+
+Initially
+Reference =100 MHz
+
+VCO =720 MHz
+
+Divider output =90 MHz
+
+Since:
+
+90 MHz <100 MHz
+
+The PFD generates UP pulses.
+
+The charge pump increases the control voltage.
+
+The VCO frequency gradually increases:
+
+720 MHz
+
+↓
+
+740 MHz
+
+↓
+
+770 MHz
+
+↓
+
+790 MHz
+
+↓
+
+800 MHz
+
+The divider output becomes:
+
+800/8
+
+=
+
+100 MHz
+
+The PLL is now frequency locked.
+
+Lock Time
+
+Lock time is the time required for the PLL to transition from an unlocked state to a stable locked state after power-up or a change in reference frequency.
+
+It depends on:
+
+1.Loop filter design  
+2.Charge pump current  
+3.VCO gain (KVCO)  
+4.Divider ratio  
+5.Initial frequency error  
+
+A faster lock time is desirable in many communication and clock-generation applications, but it often involves trade-offs with stability and jitter.
+
+### UP/DOWN Pulse Generation
+
+The Phase Frequency Detector (PFD) generates two output signals—UP and DOWN—to indicate whether the Voltage-Controlled Oscillator (VCO) frequency should be increased or decreased. These pulses are then applied to the Charge Pump, which adjusts the control voltage (Vctrl) of the VCO.  
+
+PFD Block Diagram
+           REF_CLK
+              │
+              ▼
+        +-------------+
+        |             |
+        |     PFD     |
+        |             |
+        +-------------+
+         │         │
+        UP       DOWN
+         │         │
+         ▼         ▼
+      Charge Pump
+           │
+        Loop Filter
+           │
+         VCO
+Principle of Operation
+
+The PFD compares the rising edges of:
+
+Reference Clock (REF_CLK)
+Feedback Clock (FB_CLK)
+
+Depending on which clock edge arrives first, it generates either an UP or a DOWN pulse.
+
+Case 1: Reference Clock Leads
+
+If the reference clock edge arrives before the feedback clock:
+
+REF_CLK :  ↑--------↑--------↑
+
+FB_CLK  :      ↑--------↑--------↑
+
+UP       :  ─────┐      ─────┐
+                 │           │
+                 └────       └────
+
+DOWN     : __________________________
+Operation
+Rising edge of REF_CLK sets the UP flip-flop.
+UP becomes HIGH.
+It remains HIGH until the feedback clock arrives.
+Rising edge of FB_CLK sets the DOWN flip-flop momentarily.
+Reset logic immediately resets both outputs.
+
+Result:
+
+UP pulse generated.
+Pulse width equals the time difference between REF_CLK and FB_CLK.
+Charge pump sources current.
+VCO frequency increases.
+Case 2: Feedback Clock Leads
+
+If the feedback clock edge arrives first:
+
+REF_CLK :      ↑--------↑--------↑
+
+FB_CLK  :  ↑--------↑--------↑
+
+DOWN     : ─────┐      ─────┐
+                │           │
+                └────       └────
+
+UP       : __________________________
+Operation
+FB_CLK arrives first.
+DOWN becomes HIGH.
+DOWN remains HIGH until REF_CLK arrives.
+Reset logic clears both outputs.
+
+Result:
+
+DOWN pulse generated.
+Charge pump sinks current.
+VCO frequency decreases.
+Case 3: Locked Condition
+
+When both clocks are aligned:
+
+REF_CLK : ↑     ↑     ↑
+
+FB_CLK  : ↑     ↑     ↑
+
+UP       : __________________
+
+DOWN     : __________________
+
+Ideally:
+
+No UP pulse.
+No DOWN pulse.
+Control voltage remains constant.
+PLL stays locked.
+
+Note: In practical implementations, very narrow correction pulses may still appear to compensate for small phase errors and maintain lock.
+
+Internal PFD Circuit
+
+A conventional PFD uses:
+
+Two positive-edge-triggered D flip-flops
+One asynchronous reset gate
+                 D = 1
+                  │
+      REF_CLK ───►┌────────┐
+                  │  DFF1  │
+                  └───┬────┘
+                      │
+                     UP
+                      │
+                      ├──────────┐
+                      │          │
+                      ▼          ▼
+                  +----------------+
+                  |  RESET Logic   |
+                  +----------------+
+                      ▲          ▲
+                      │          │
+                     DOWN        │
+                  ┌───┴────┐     │
+      FB_CLK ───► │  DFF2  │◄────┘
+                  └────────┘
+#### Working
+
+Both D inputs are tied to logic HIGH.  
+REF_CLK sets the UP output.  
+FB_CLK sets the DOWN output.  
+When both outputs become HIGH, the reset gate clears both flip-flops.  
+
+#### Pulse Width
+
+The width of the UP or DOWN pulse is proportional to the phase difference.
+
+Phase Difference	Pulse Width
+Small	             Narrow pulse  
+Medium	             Medium pulse  
+Large	             Wide pulse  
+
+Larger phase error → longer pulse → more charge transferred → faster frequency correction.  
+##### Truth Table
+
+Condition	   UP	DOWN	PLL Action
+REF leads FB	1	0	Increase VCO frequency
+FB leads REF	0	1	Decrease VCO frequency
+REF = FB	    0	0	Maintain lock
