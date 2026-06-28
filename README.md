@@ -373,19 +373,19 @@ DOWN     : __________________
 
 Ideally:
 
-No UP pulse.
-No DOWN pulse.
-Control voltage remains constant.
-PLL stays locked.
+No UP pulse.  
+No DOWN pulse.  
+Control voltage remains constant.  
+PLL stays locked.  
 
-Note: In practical implementations, very narrow correction pulses may still appear to compensate for small phase errors and maintain lock.
+Note: In practical implementations, very narrow correction pulses may still appear to compensate for small phase errors and maintain lock.  
 
 Internal PFD Circuit
 
 A conventional PFD uses:
 
-Two positive-edge-triggered D flip-flops
-One asynchronous reset gate
+Two positive-edge-triggered D flip-flops  
+One asynchronous reset gate   
                  D = 1
                   │
       REF_CLK ───►┌────────┐
@@ -417,15 +417,18 @@ When both outputs become HIGH, the reset gate clears both flip-flops.
 
 The width of the UP or DOWN pulse is proportional to the phase difference.
 
-Phase Difference	Pulse Width
-Small	             Narrow pulse  
-Medium	             Medium pulse  
-Large	             Wide pulse  
+| Phase Difference | Pulse Width  |
+| ---------------- | ------------ |
+| Small            | Narrow pulse |
+| Medium           | Medium pulse |
+| Large            | Wide pulse   |
+
 
 Larger phase error → longer pulse → more charge transferred → faster frequency correction.  
 ##### Truth Table
 
-Condition	   UP	DOWN	PLL Action
-REF leads FB	1	0	Increase VCO frequency
-FB leads REF	0	1	Decrease VCO frequency
-REF = FB	    0	0	Maintain lock
+| Condition    | UP | DOWN | PLL Action             |
+| ------------ | -- | ---- | ---------------------- |
+| REF leads FB | 1  | 0    | Increase VCO frequency |
+| FB leads REF | 0  | 1    | Decrease VCO frequency |
+| REF = FB     | 0  | 0    | Maintain lock          |
