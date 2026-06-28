@@ -178,6 +178,7 @@ Charge pump decreases Vctrl.
 VCO frequency decreases.  
 
 Case 3: Frequency Locked
+```
 Reference
 
 ↑     ↑     ↑
@@ -185,7 +186,7 @@ Reference
 Feedback
 
 ↑     ↑     ↑
-
+```
 Both clocks have the same frequency.
 
 Lock Acquisition Process
@@ -343,6 +344,7 @@ VCO frequency increases.
 Case 2: Feedback Clock Leads
 
 If the feedback clock edge arrives first:
+```
 
 REF_CLK :      ↑--------↑--------↑
 
@@ -353,7 +355,9 @@ DOWN     : ─────┐      ─────┐
                 └────       └────
 
 UP       : __________________________
-Operation
+```
+Operation:
+
 FB_CLK arrives first.
 DOWN becomes HIGH.
 DOWN remains HIGH until REF_CLK arrives.
@@ -367,6 +371,7 @@ VCO frequency decreases.
 Case 3: Locked Condition
 
 When both clocks are aligned:
+```
 
 REF_CLK : ↑     ↑     ↑
 
@@ -375,7 +380,7 @@ FB_CLK  : ↑     ↑     ↑
 UP       : __________________
 
 DOWN     : __________________
-
+````
 Ideally:
 
 No UP pulse.  
