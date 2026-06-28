@@ -283,6 +283,7 @@ A faster lock time is desirable in many communication and clock-generation appli
 The Phase Frequency Detector (PFD) generates two output signals—UP and DOWN—to indicate whether the Voltage-Controlled Oscillator (VCO) frequency should be increased or decreased. These pulses are then applied to the Charge Pump, which adjusts the control voltage (Vctrl) of the VCO.  
 
 PFD Block Diagram
+
            REF_CLK
               │
               ▼
@@ -300,12 +301,13 @@ PFD Block Diagram
         Loop Filter
            │
          VCO
-Principle of Operation
+		 
+#### Principle of Operation
 
 The PFD compares the rising edges of:
 
-Reference Clock (REF_CLK)
-Feedback Clock (FB_CLK)
+1.Reference Clock (REF_CLK)  
+2.Feedback Clock (FB_CLK)  
 
 Depending on which clock edge arrives first, it generates either an UP or a DOWN pulse.
 
@@ -335,6 +337,7 @@ UP pulse generated.
 Pulse width equals the time difference between REF_CLK and FB_CLK.
 Charge pump sources current.
 VCO frequency increases.
+
 Case 2: Feedback Clock Leads
 
 If the feedback clock edge arrives first:
